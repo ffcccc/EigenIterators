@@ -5,6 +5,28 @@ Since the Eigen::Array objects have no member functions begin/end defined nor ha
 
 This is an adaptation of begin/end helper functions defined for std::valarray, which in turn is an overload of std::begin/end, defined in <iterator>.
 
-Parameters:
+## Parameters:
 x -> A Eigen::Array object.
 
+## Demo
+```c++
+#include <algorithm>
+#include "Eigen/Core"
+
+#define NA 1000000.0
+
+using namespace std;
+using namespace Eigen;
+
+int main() {
+  ArrayXd side(side_par);
+  side << 2.0, 2.0, NA, NA, 2.0;
+  
+  replace_if(begin(side), end(side), [](double i) { return (i == NA); }, 1.0);
+  
+  if( any_of(begin(side), end(side), [](double i) { return (fabs(i) != 1.0); }) ) {
+    return 1;
+  }
+  return 0;
+ }
+ ```
