@@ -10,7 +10,7 @@
   template<class _Tp>
     inline _Tp*
     begin(Eigen::Array<_Tp, -1, 1>& __va)
-    { return std::__addressof(__va(0)); }
+    { return std::addressof(__va(0)); }
 
   /**
    *  @brief  Return an iterator pointing to the first element of
@@ -20,7 +20,7 @@
   template<class _Tp>
     inline const _Tp*
     begin(const Eigen::Array<_Tp, -1, 1>& __va)
-    { return std::__addressof(__va(0)); }
+    { return std::addressof(__va(0)); }
 
   /**
    *  @brief  Return an iterator pointing to one past the last element of
@@ -30,7 +30,7 @@
   template<class _Tp>
     inline _Tp*
     end(Eigen::Array<_Tp, -1, 1>& __va)
-    { return std::__addressof(__va(0)) + __va.size(); }
+    { return std::addressof(__va(0)) + __va.size(); }
 
   /**
    *  @brief  Return an iterator pointing to one past the last element of
@@ -40,7 +40,7 @@
   template<class _Tp>
     inline const _Tp*
     end(const Eigen::Array<_Tp, -1, 1>& __va)
-    { return std::__addressof(__va(0)) + __va.size(); }
+    { return std::addressof(__va(0)) + __va.size(); }
 
 #endif
 
