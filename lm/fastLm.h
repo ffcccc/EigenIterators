@@ -23,8 +23,8 @@
 #define RCPPEIGEN_FASTLM_H
 
 //#include <RcppEigen.h>
-#include "Eigen334/Core"
-#include "Eigen334/Eigenvalues"
+#include "eigen334/Core"
+#include "eigen334/Eigenvalues"
 
 #include <tuple>
 

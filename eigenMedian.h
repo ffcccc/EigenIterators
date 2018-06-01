@@ -47,37 +47,8 @@
 	  return med;    
 	}
 	
-//	double fuzzy_median (std::vector<double> y, std::vector<double> p) {
-//		std::vector<MyType> groups[3];
-//		for(auto i=0; i<N; i++){
-//			int pos = int(snp(i));
-//			groups[pos].push_back(y(i));
-//		}
-//		for(auto i=0; i<3; i++){
-//			med[i] = median(groups[i]);
-//		}
-//
-//		return(med);
-//	}
-	
-	double fuzzy_mean (std::vector<double> y, std::vector<double> p) {
-  
-  int n = p.size();
-
-  double sumyp = 0;
-  double sump = 0;
-  for (int i=0;i<n;++i){ 
-    sumyp += p[i]*y[i];
-    sump += p[i];
-	}
-
-  double med = sumyp/sump;
-
-  return(med);
-}
-
   template<class _Tp>
-_Tp fuzzy_mean (const Eigen::Array<_Tp, -1, 1>& y, const Eigen::Array<_Tp, -1, 1>&  p, _Tp &sump) {
+_Tp group_mean (const Eigen::Array<_Tp, -1, 1>& y, const Eigen::Array<_Tp, -1, 1>&  p, _Tp &sump) {
   
   _Tp sumyp = (p*y).sum();
   sump = p.sum();
@@ -87,16 +58,16 @@ _Tp fuzzy_mean (const Eigen::Array<_Tp, -1, 1>& y, const Eigen::Array<_Tp, -1, 1
 }
   
 	template<class _Tp>
-_Tp fuzzy_mean (const Eigen::Array<_Tp, -1, 1>& y, const Eigen::Array<_Tp, -1, 1>&  p) {
+_Tp group_mean (const Eigen::Array<_Tp, -1, 1>& y, const Eigen::Array<_Tp, -1, 1>&  p) {
 	_Tp sump(0);
-	return fuzzy_mean(y, p, sump);
+	return group_mean(y, p, sump);
 }
   
 	template<class _Tp>
-_Tp fuzzy_var (const Eigen::Array<_Tp, -1, 1>& y, const Eigen::Array<_Tp, -1, 1>&  p) {
+_Tp group_var (const Eigen::Array<_Tp, -1, 1>& y, const Eigen::Array<_Tp, -1, 1>&  p) {
   
   _Tp sump(0);
-	_Tp avg = fuzzy_mean(y, p, sump);
+	_Tp avg = group_mean(y, p, sump);
   _Tp sumy2p = (p * ( (y-avg).square() ) ).sum();
 
   _Tp var = sumy2p/(sump-1);
