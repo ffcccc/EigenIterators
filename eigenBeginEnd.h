@@ -1,3 +1,21 @@
+// Copyright (C) 2018 Fabio Rosa
+//
+// This file is inspired to the valarray non-member begin/end overload
+// The intent of this function is to allow range for loops to work with Eigen lib arrays, not to provide container semantics.
+//
+// EigenUtils is free software: you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 2 of the License, or
+// (at your option) any later version.
+//
+// EigenUtils is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You can check a copy of the GNU General Public License at
+// <http://www.gnu.org/licenses/>.
+
 #ifndef ___EigenIteratorHelper___
 #define ___EigenIteratorHelper___
 

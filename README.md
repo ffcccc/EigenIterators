@@ -30,3 +30,14 @@ int main() {
   return 0;
  }
  ```
+
+# EigenIterators
+post-condition: After returning, the elements in v may be reordered and the resulting order is implementation defined.
+
+* 		https://stackoverflow.com/questions/1719070/what-is-the-right-approach-when-using-stl-container-for-median-calculation/1719155#1719155         
+*		This algorithm handles both even and odd sized inputs efficiently using the STL nth_element (amortized O(N)) algorithm
+*		and the max_element algorithm (O(n)). Note that nth_element has another guaranteed side effect, namely that all of the elements
+*		before n are all guaranteed to be less than v[n], just not necessarily sorted.
+
+
+# fastLM

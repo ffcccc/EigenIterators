@@ -1,3 +1,21 @@
+// Copyright (C) 2018 Fabio Rosa
+//
+// This file is based on the ideas sugested in:
+// https://stackoverflow.com/questions/1719070/what-is-the-right-approach-when-using-stl-container-for-median-calculation/1719155
+//
+// EigenUtils is free software: you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 2 of the License, or
+// (at your option) any later version.
+//
+// EigenUtils is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You can check a copy of the GNU General Public License at
+// <http://www.gnu.org/licenses/>.
+
 #ifndef ___EigenHelper___
 #define ___EigenHelper___
 

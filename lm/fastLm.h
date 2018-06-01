@@ -1,10 +1,12 @@
 // -*- mode: C++; c-indent-level: 4; c-basic-offset: 4; tab-width: 8 -*-
 //
-// fastLm.h: Rcpp/Eigen example of a simple lm() alternative
+// 
+// Copyright (C) 2018 Fabio Rosa
 //
-// Copyright (C) 2011 - 2015  Douglas Bates, Dirk Eddelbuettel and Romain Francois
-//
-// This file is part of RcppEigen.
+// This file is an adaptation from the Rcpp/Eigen example of a simple lm() file "fastLm.h"
+// (Copyright (C) Bates, Eddelbuettel Francois)
+// This version does not include the GESDD solver (due to F77 deps)
+// This version does not include/link dependencies from s) from Rcpp, RcppEigen or R_ext
 //
 // RcppEigen is free software: you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by
@@ -16,13 +18,22 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// in file.path(R.home("share"), "licenses").  If not, see
+// EigenUtils is free software: you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 2 of the License, or
+// (at your option) any later version.
+//
+// EigenUtils is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You can check a copy of the GNU General Public License at
 // <http://www.gnu.org/licenses/>.
+
 #ifndef RCPPEIGEN_FASTLM_H
 #define RCPPEIGEN_FASTLM_H
 
-//#include <RcppEigen.h>
 #include "eigen334/Core"
 #include "eigen334/Eigenvalues"
 
@@ -121,11 +132,6 @@ class QR : public lm
 public:
     QR(const MatrixXd&, const VectorXd&);
 };
-
-//    class GESDD : public lm {
-//    public:
-//	GESDD(const MatrixXd&, const VectorXd&);
-//    };
 
 class SVD : public lm
 {

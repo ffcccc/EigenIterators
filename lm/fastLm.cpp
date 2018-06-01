@@ -1,10 +1,11 @@
 // -*- mode: C++; c-indent-level: 4; c-basic-offset: 4; tab-width: 8 -*-
 //
-// fastLm.cpp: Rcpp/Eigen example of a simple lm() alternative
+// Copyright (C) 2018 Fabio Rosa
 //
-// Copyright (C) 2011 - 2015  Douglas Bates, Dirk Eddelbuettel and Romain Francois
-//
-// This file is part of RcppEigen.
+// This file is an adaptation from the Rcpp/Eigen example of a simple lm() file "fastLm.h"
+// (Copyright (C) Bates, Eddelbuettel Francois)
+// This version does not include the GESDD solver (due to F77 deps)
+// This version does not include/link dependencies from s) from Rcpp, RcppEigen or R_ext
 //
 // RcppEigen is free software: you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by
@@ -16,28 +17,30 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// in file.path(R.home("share"), "licenses").  If not, see
+// EigenUtils is free software: you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 2 of the License, or
+// (at your option) any later version.
+//
+// EigenUtils is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You can check a copy of the GNU General Public License at
 // <http://www.gnu.org/licenses/>.
 
+
 #include "fastLm.h"
-#if !defined(EIGEN_USE_MKL) // don't use R Lapack.h if MKL is enabled
+//#if !defined(EIGEN_USE_MKL) // don't use R Lapack.h if MKL is enabled
 //#include <R_ext/Lapack.h>
-#endif
+//#endif
 
 class m_coef;
 
 namespace lmsol
 {
-//    using Rcpp::_;
-//    using Rcpp::as;
-//    using Rcpp::CharacterVector;
-//    using Rcpp::clone;
-//    using Rcpp::List;
-//    using Rcpp::NumericMatrix;
-//    using Rcpp::NumericVector;
-//    using Rcpp::RObject;
-//    using Rcpp::wrap;
+
 double NA_REAL;
 int NA_INTEGER;
 
@@ -148,34 +151,6 @@ Ldlt::Ldlt(const MatrixXd& X, const VectorXd& y)
     m_se = Ch.solve(I_p()).diagonal().array().sqrt();
 }
 
-// int gesdd(MatrixXd& A, ArrayXd& S, MatrixXd& Vt)
-//{
-//    int info, mone = -1, m = A.rows(), n = A.cols();
-//    std::vector<int> iwork(8 * n);
-//    double wrk;
-//    if(m < n || S.size() != n || Vt.rows() != n || Vt.cols() != n)
-//	throw std::invalid_argument("dimension mismatch in gesvd");
-//    F77_CALL(dgesdd)("O", &m, &n, A.data(), &m, S.data(), A.data(), &m, Vt.data(), &n, &wrk, &mone, &iwork[0], &info);
-//    int lwork(wrk);
-//    std::vector<double> work(lwork);
-//    F77_CALL(dgesdd)
-//    ("O", &m, &n, A.data(), &m, S.data(), A.data(), &m, Vt.data(), &n, &work[0], &lwork, &iwork[0], &info);
-//    return info;
-//}
-
-// GESDD::GESDD(const MatrixXd& X, const VectorXd& y)
-//    : lm(X, y)
-//{
-//    MatrixXd U(X), Vt(m_p, m_p);
-//    ArrayXd S(m_p);
-//    if(gesdd(U, S, Vt))
-//	throw std::runtime_error("error in gesdd");
-//    MatrixXd VDi(Vt.adjoint() * Dplus(S).matrix().asDiagonal());
-//    m_coef = VDi * U.adjoint() * y;
-//    m_fitted = X * m_coef;
-//    m_se = VDi.rowwise().norm();
-//}
-
 SVD::SVD(const MatrixXd& X, const VectorXd& y)
     : lm(X, y)
 {
@@ -230,16 +205,7 @@ lmres fastLm(const MatrixXd& X, const VectorXd& y, int type)
     lm ans(do_lm(X, y, type));
 
     // Copy coefficients and install names, if any
-    // NumericVector     coef(wrap(ans.coef()));
     VectorXd coef = ans.coef();
-
-    //    List dimnames(NumericMatrix(Xs).attr("dimnames"));
-    //    if(dimnames.size() > 1) {
-    //	RObject colnames = dimnames[1];
-    //	if(!(colnames).isNULL())
-    //	    coef.attr("names") = clone(CharacterVector(colnames));
-    //    }
-
     VectorXd resid = y - ans.fitted();
     int rank = ans.rank();
     int df = (rank == NA_INTEGER) ? n - X.cols() : n - rank;
@@ -249,19 +215,7 @@ lmres fastLm(const MatrixXd& X, const VectorXd& y, int type)
     VectorXd fit = ans.fitted();
 
     lmres res = std::make_tuple(coef, se, rank, df, resid, s, fit);
-    //        return List::create(_["coefficients"]  = coef,
-    //                            _["se"]            = se,
-    //                            _["rank"]          = rank,
-    //                            _["df.residual"]   = df,
-    //                            _["residuals"]     = resid,
-    //                            _["s"]             = s,
-    //                            _["fitted.values"] = ans.fitted());
     return res;
 }
 }
 
-// This defines the R-callable function 'fastLm'
-// [[Rcpp::export]]
-// Rcpp::List fastLm_Impl(Rcpp::NumericMatrix X, Rcpp::NumericVector y, int type) {
-//    return lmsol::fastLm(X, y, type);
-//}
