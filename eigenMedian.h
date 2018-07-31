@@ -19,6 +19,7 @@
 #ifndef ___EigenHelper___
 #define ___EigenHelper___
 
+#include <random>
 #include <algorithm>
 #include <vector>
 #include "eigenBeginEnd.h"
