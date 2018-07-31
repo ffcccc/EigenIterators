@@ -1,4 +1,4 @@
-# EigenIterators
+# Eigen Iterators
 Defines an iterator pointing to the first/last element in a Eigen::Array object
 
 Since the Eigen::Array objects have no member functions begin/end defined nor have iterator member types, this snippet of code implements a random-access iterator of an unspecified type whose value_type is T and its reference type is T& for the mutable version and const T& for the constant iterator declaration.
@@ -31,13 +31,17 @@ int main() {
  }
  ```
 
-# EigenIterators
+# Eigen median, mean, variance
 post-condition: After returning, the elements in v may be reordered and the resulting order is implementation defined.
 
-* 		https://stackoverflow.com/questions/1719070/what-is-the-right-approach-when-using-stl-container-for-median-calculation/1719155#1719155         
-*		This algorithm handles both even and odd sized inputs efficiently using the STL nth_element (amortized O(N)) algorithm
-*		and the max_element algorithm (O(n)). Note that nth_element has another guaranteed side effect, namely that all of the elements
-*		before n are all guaranteed to be less than v[n], just not necessarily sorted.
+https://stackoverflow.com/questions/1719070/what-is-the-right-approach-when-using-stl-container-for-median-calculation/1719155#1719155         
+This algorithm handles both even and odd sized inputs efficiently using the STL nth_element (amortized O(N)) algorithm
+and the max_element algorithm (O(n)). Note that nth_element has another guaranteed side effect, namely that all of the elements
+before n are all guaranteed to be less than v[n], just not necessarily sorted.
 
 
-# fastLM
+# Eigen fast linear regression solver
+
+# Eigen distance
+
+# Eigen contingency tables

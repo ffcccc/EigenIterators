@@ -34,8 +34,8 @@
 #ifndef RCPPEIGEN_FASTLM_H
 #define RCPPEIGEN_FASTLM_H
 
-#include "eigen334/Core"
-#include "eigen334/Eigenvalues"
+#include "Eigen/Core"
+#include "Eigen/Eigenvalues"
 
 #include <tuple>
 
