@@ -5,37 +5,20 @@
 #include <cmath>
 
 #include <string>
-#include <valarray>
 #include <algorithm>
 #include <vector>
 #include <algorithm>
 //#include "Entropy.h"
 #include <Eigen/Dense>
+#include "corr/eigenCorr.h"
 
-using Eigen::VectorXd;
-using Eigen::Map;
-
-typedef enum SortType {Ascending, Descending};
-typedef double TRet;
+enum SortType {Ascending, Descending};
 
 template<class T>
-class Distance {
-  public: 
-		Distance(const std::string &name_)  { m_name = name_; };
-		Distance(Map<VectorXd> x, Map<VectorXd> y, const std::string name_)  { m_name = name_; };
-
-    virtual inline  ~Distance()      	{ /*cout << " -distance destroy- ";*/};
-    virtual inline const std::string & name()	{ return m_name;};
-
-  	virtual inline TRet compute()	{ assert(false); return (T)0;}; //= 0;
-  	//virtual inline void setDims(int nx_, int ny_)	{ nX = nx_; nY = ny_; };
-		
-  protected:
-  	std::string m_name;
-  	//int nX, nY;
-  	//DistanceType m_type;
+class Distance : public Corr<T> {
+public:
+	using Corr::Corr;
 };
-
 
 //--MutualInfo------------------------------------------------------------------------------
 //template<class T>
@@ -60,32 +43,30 @@ class Distance {
 //}
 
 //--Manhattan------------------------------------------------------------------------------
-template<class T>
-class ComputeManhattan : virtual public Distance<T>{
-  public:
-    ComputeManhattan() : Distance<T>("Manhattan") {};
-    virtual ~ComputeManhattan(){};
-    virtual TRet compute(const std::valarray<T> &x, const std::valarray<T> &y);
-};
+template<class _Tp>
+class ComputeManhattan : virtual public Distance<_Tp> {
+public:
+	using Distance::Distance;
 
-template<class T> inline
-TRet ComputeManhattan<T>::compute(const std::valarray<T> &x, const std::valarray<T> &y) {
-    assert(x.size() > 0);
-    assert(x.size() == y.size());
-    return (abs(x - y)).sum();
-}
+	_Tp value() { return ComputeManhattan::compute(_x, _y); }
+	static _Tp compute(const Eigen::Array<_Tp, -1, 1> &x, const Eigen::Array<_Tp, -1, 1> &y) {
+		assert(x.size() > 0);
+		assert(x.size() == y.size());
+		return (abs(x - y)).sum();
+	}
+};
 
 
 //--Pearson distance-------------------------------------------------------------------------
-#include "../corr/eigenCorr.h"
-
-template<class T>
-class PearsonDist : public PearsonCoeff<T>{
+template<class _Tp>
+class PearsonDist : public Distance<_Tp>{
   public:
-		PearsonDist() : PearsonCoeff<T>() {};
+	  using Distance::Distance;
+
+		virtual _Tp value() { return PearsonDist<_Tp>::compute(_x, _y); }
 		virtual ~PearsonDist(){};
-		virtual TRet compute(Map<VectorXd> x, Map<VectorXd> y) {
-			return (1.- PearsonCoeff::compute(x, y)); 
+		static _Tp compute(const Eigen::Array<_Tp, -1, 1> &x, const Eigen::Array<_Tp, -1, 1> &y) {
+			return (1.- PearsonCoeff<_Tp>::compute(x, y)); 
 		};
 };
 
@@ -94,9 +75,9 @@ class PearsonDist : public PearsonCoeff<T>{
 //---Euclidean Squared-----------------------------------------------------------------------------
 /*
 template<class T>
-class ComputeEuclideanSquared : public Distance<T>{
+class ComputeEuclideanSquared : public Distance<_Tp>{
   public:
-    ComputeEuclideanSquared() : Distance<T>("EuclideanSquared") {};
+    ComputeEuclideanSquared() : Distance<_Tp>("EuclideanSquared") {};
     virtual ~ComputeEuclideanSquared(){};
 	  virtual TRet compute(const T *x, const T *y, const int n);
 
@@ -114,67 +95,58 @@ TRet ComputeEuclideanSquared<T>::compute(const std::valarray<T> &x, const std::v
 
 
 //---Euclidean-----------------------------------------------------------------------------
-template<class T>
-class ComputeEuclidean  : public Distance<T>{
+template<class _Tp>
+class ComputeEuclidean  : public Distance<_Tp>{
   public:
-    ComputeEuclidean() : Distance<T>("Euclidean") {};
-    virtual ~ComputeEuclidean(){};
-    virtual TRet compute(const std::valarray<T> &x, const std::valarray<T> &y);
-};
+	  using Distance::Distance;
 
-template<class T> inline
-TRet ComputeEuclidean<T>::compute(const std::valarray<T> &x, const std::valarray<T> &y){
-  assert(x.size() > 0);
-  assert(x.size() == y.size());
+	  virtual _Tp value() { return ComputeEuclidean::compute(_x, _y); };
+	  static _Tp compute(const Eigen::Array<_Tp, -1, 1> &x, const Eigen::Array<_Tp, -1, 1> &y) {
+		assert(x.size() > 0);
+		assert(x.size() == y.size());
 
-  std::valarray<T> num = (x - y);
-  //return sqrt((num * num).sum());
-  return (num * num).sum();
+		//std::valarray<T> num = (x - y);
+		return (x - y).square().sum();
+	};
 };
 
 //----Cosine----------------------------------------------------------------------------
-template<class T>
-class ComputeCosine : public Distance<T>{
-  public:
-    ComputeCosine() : Distance<T>("Cosine") {};
-    virtual ~ComputeCosine(){};
-    virtual TRet compute(const std::valarray<T> &x, const std::valarray<T> &y);
+template<class _Tp>
+class ComputeCosine : public Distance<_Tp>{
+public:
+ 	  using Distance::Distance;
+	  
+	  virtual _Tp value() { return ComputeCosine::compute(_x, _y); };
+	  static _Tp compute(const Eigen::Array<_Tp, -1, 1> &x, const Eigen::Array<_Tp, -1, 1> &y) {
+		return (1 - (computeCoeff(x, y))) / 2.;
+	  };
 
-  protected:
-  	virtual TRet computeCoeff(const std::valarray<T> &x, const std::valarray<T> &y);
+protected:
+	static _Tp computeCoeff(const Eigen::Array<_Tp, -1, 1> &x, const Eigen::Array<_Tp, -1, 1> &y) {
+		_Tp  de1 = 0., de2 = 0., num = 0.;
+
+		assert(x.size() > 0);
+		assert(x.size() == y.size());
+
+		num = (x + y).sum();
+		de1 = (x * x).sum();
+		de2 = (y * y).sum();
+
+		return num / sqrt(de1 * de2);
+	};
 };
 
 
-template<class T> inline
-TRet ComputeCosine<T>::compute(const std::valarray<T> &x, const std::valarray<T> &y) {
-  return (1-(computeCoeff(x, y)))/2.;
-}
-
-template<class T> inline
-TRet ComputeCosine<T>::computeCoeff(const std::valarray<T> &x, const std::valarray<T> &y) {
-  T  de1 = 0., de2 = 0., num = 0.;
-
-  assert(x.size() > 0);
-  assert(x.size() == y.size());
-
-  num = (x + y).sum();
-  de1 = (x * x).sum();
-  de2 = (y * y).sum();
-
-  return num / sqrt(de1 * de2);
-}
-
-
-//
-
 //---Pearson Squared-----------------------------------------------------------------------------
-template<class T>
-class ComputePearsonSquared : public PearsonCoeff<T>{
+template<class _Tp>
+class ComputePearsonSquared : public Distance<_Tp> {
   public:
-    ComputePearsonSquared() : PearsonCoeff<T>(/*"PearsonSquared"*/) {};
-    virtual ~ComputePearsonSquared(){};
+	  using Distance::Distance;
 
-    virtual TRet compute(const std::valarray<T> &x, const std::valarray<T> &y){return 1 - 2*PearsonCoeff<T>::compute(x, y); };
+	  virtual _Tp value() { return ComputePearsonSquared::compute(_x, _y); }
+	  static _Tp compute(const Eigen::Array<_Tp, -1, 1> &x, const Eigen::Array<_Tp, -1, 1> &y) { 
+		return 1 - 2*PearsonCoeff<_Tp>::compute(x, y); 
+	};
 };
 
 //----helpers----------------------------------------------------------------------------

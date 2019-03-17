@@ -41,122 +41,123 @@
 
 namespace lmsol
 {
-using Eigen::ArrayXd;
-using Eigen::ColPivHouseholderQR;
-using Eigen::ComputeThinU;
-using Eigen::ComputeThinV;
-using Eigen::HouseholderQR;
-using Eigen::JacobiSVD;
-using Eigen::LDLT;
-using Eigen::LLT;
-using Eigen::Lower;
-using Eigen::Map;
-using Eigen::MatrixXd;
-using Eigen::SelfAdjointEigenSolver;
-using Eigen::SelfAdjointView;
-using Eigen::TriangularView;
-using Eigen::VectorXd;
-using Eigen::Upper;
+	using Eigen::ArrayXd;
+	using Eigen::ColPivHouseholderQR;
+	using Eigen::ComputeThinU;
+	using Eigen::ComputeThinV;
+	using Eigen::HouseholderQR;
+	using Eigen::JacobiSVD;
+	using Eigen::LDLT;
+	using Eigen::LLT;
+	using Eigen::Lower;
+	using Eigen::Map;
+	using Eigen::MatrixXd;
+	using Eigen::SelfAdjointEigenSolver;
+	using Eigen::SelfAdjointView;
+	using Eigen::TriangularView;
+	using Eigen::VectorXd;
+	using Eigen::Upper;
 
-typedef MatrixXd::Index Index;
-typedef MatrixXd::Scalar Scalar;
-typedef MatrixXd::RealScalar RealScalar;
-typedef ColPivHouseholderQR<MatrixXd>::PermutationType Permutation;
-typedef Permutation::IndicesType Indices;
+	typedef MatrixXd::Index Index;
+	typedef MatrixXd::Scalar Scalar;
+	typedef MatrixXd::RealScalar RealScalar;
+	typedef ColPivHouseholderQR<MatrixXd>::PermutationType Permutation;
+	typedef Permutation::IndicesType Indices;
 
-class lm
-{
-protected:
-    MatrixXd m_X;                     /**< model matrix */
-    VectorXd m_y;                     /**< response vector */
-    Index m_n;                        /**< number of rows of X */
-    Index m_p;                        /**< number of columns of X */
-    VectorXd m_coef;                  /**< coefficient vector */
-    int m_r;                          /**< computed rank or NA_INTEGER */
-    VectorXd m_fitted;                /**< vector of fitted values */
-    VectorXd m_se;                    /**< standard errors  */
-    RealScalar m_prescribedThreshold; /**< user specified tolerance */
-    bool m_usePrescribedThreshold;
 
-public:
-    lm(const MatrixXd&, const VectorXd&);
+	class lm
+	{
+	protected:
+		MatrixXd m_X;                     /**< model matrix */
+		VectorXd m_y;                     /**< response vector */
+		Index m_n;                        /**< number of rows of X */
+		Index m_p;                        /**< number of columns of X */
+		VectorXd m_coef;                  /**< coefficient vector */
+		int m_r;                          /**< computed rank or NA_INTEGER */
+		VectorXd m_fitted;                /**< vector of fitted values */
+		VectorXd m_se;                    /**< standard errors  */
+		RealScalar m_prescribedThreshold; /**< user specified tolerance */
+		bool m_usePrescribedThreshold;
 
-    ArrayXd Dplus(const ArrayXd& D);
-    MatrixXd I_p() const
-    {
-	return MatrixXd::Identity(m_p, m_p);
-    }
-    MatrixXd XtX() const;
+	public:
+		lm(const MatrixXd&, const VectorXd&);
 
-    // setThreshold and threshold are based on ColPivHouseholderQR methods
-    RealScalar threshold() const;
-    const VectorXd& se() const
-    {
-	return m_se;
-    }
-    const VectorXd& coef() const
-    {
-	return m_coef;
-    }
-    const VectorXd& fitted() const
-    {
-	return m_fitted;
-    }
-    int rank() const
-    {
-	return m_r;
-    }
-    lm& setThreshold(const RealScalar&);
-};
+		ArrayXd Dplus(const ArrayXd& D);
+		MatrixXd I_p() const
+		{
+			return MatrixXd::Identity(m_p, m_p);
+		}
+		MatrixXd XtX() const;
 
-class ColPivQR : public lm
-{
-public:
-    ColPivQR(const MatrixXd&, const VectorXd&);
-};
+		// setThreshold and threshold are based on ColPivHouseholderQR methods
+		RealScalar threshold() const;
+		const VectorXd& se() const
+		{
+			return m_se;
+		}
+		const VectorXd& coef() const
+		{
+			return m_coef;
+		}
+		const VectorXd& fitted() const
+		{
+			return m_fitted;
+		}
+		int rank() const
+		{
+			return m_r;
+		}
+		lm& setThreshold(const RealScalar&);
+	};
 
-class Llt : public lm
-{
-public:
-    Llt(const MatrixXd&, const VectorXd&);
-};
+	class ColPivQR : public lm
+	{
+	public:
+		ColPivQR(const MatrixXd&, const VectorXd&);
+	};
 
-class Ldlt : public lm
-{
-public:
-    Ldlt(const MatrixXd&, const VectorXd&);
-};
+	class Llt : public lm
+	{
+	public:
+		Llt(const MatrixXd&, const VectorXd&);
+	};
 
-class QR : public lm
-{
-public:
-    QR(const MatrixXd&, const VectorXd&);
-};
+	class Ldlt : public lm
+	{
+	public:
+		Ldlt(const MatrixXd&, const VectorXd&);
+	};
 
-class SVD : public lm
-{
-public:
-    SVD(const MatrixXd&, const VectorXd&);
-};
+	class QR : public lm
+	{
+	public:
+		QR(const MatrixXd&, const VectorXd&);
+	};
 
-class SymmEigen : public lm
-{
-public:
-    SymmEigen(const MatrixXd&, const VectorXd&);
-};
+	class SVD : public lm
+	{
+	public:
+		SVD(const MatrixXd&, const VectorXd&);
+	};
 
-enum { ColPivQR_t = 0, QR_t, LLT_t, LDLT_t, SVD_t, SymmEigen_t, GESDD_t };
-enum { coefficients = 0, se, rank, df_residual, residuals, s, fitted_values };
-typedef std::tuple<VectorXd, VectorXd, int, int, VectorXd, double, VectorXd> lmres;
-//        		 List::create(_["coefficients"]  = coef,
-//                            _["se"]            = se,
-//                            _["rank"]          = rank,
-//                            _["df.residual"]   = df,
-//                            _["residuals"]     = resid,
-//                            _["s"]             = s,
-//                            _["fitted.values"] = ans.fitted());
+	class SymmEigen : public lm
+	{
+	public:
+		SymmEigen(const MatrixXd&, const VectorXd&);
+	};
 
-// extern "C" SEXP fastLm(SEXP Xs, SEXP ys, SEXP types);
-lmres fastLm(const MatrixXd&, const VectorXd&, int type);
+	enum { ColPivQR_t = 0, QR_t, LLT_t, LDLT_t, SVD_t, SymmEigen_t, GESDD_t };
+	enum { coefficients = 0, se, rank, df_residual, residuals, s, fitted_values };
+	typedef std::tuple<VectorXd, VectorXd, int, int, VectorXd, double, VectorXd> lmres;
+	//        		 List::create(_["coefficients"]  = coef,
+	//                            _["se"]            = se,
+	//                            _["rank"]          = rank,
+	//                            _["df.residual"]   = df,
+	//                            _["residuals"]     = resid,
+	//                            _["s"]             = s,
+	//                            _["fitted.values"] = ans.fitted());
+
+	// extern "C" SEXP fastLm(SEXP Xs, SEXP ys, SEXP types);
+	lmres fastLm(const MatrixXd&, const VectorXd&, int type);
 }
 #endif
