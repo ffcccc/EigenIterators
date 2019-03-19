@@ -14,7 +14,7 @@
 template<class _Tp>
 class Corr {
   public: 
-	Corr(const std::string &name_)  { m_name = name_; };
+	//Corr(const std::string &name_)  { m_name = name_; };
 	Corr(const Eigen::Array<_Tp, -1, 1> &x, const Eigen::Array<_Tp, -1, 1> &y)  {
 		//m_name = ""; 
 		_x = x;
@@ -25,7 +25,7 @@ class Corr {
 
     //virtual inline const std::string & name()	{ return m_name; };
 	
-	virtual inline _Tp value() { return Corr::compute(_x, _y); };
+	virtual inline _Tp value() { return Corr::compute(this->_x, this->_y); };
 
 	static _Tp compute(const Eigen::Array<_Tp, -1, 1> &x, const Eigen::Array<_Tp, -1, 1> &y) {
 		return _Tp(1);
@@ -44,8 +44,8 @@ class Corr {
 template<class _Tp>
 class PearsonCoeff : public Corr<_Tp>{
 public:
-	using Corr::Corr;
-	virtual _Tp value() { return PearsonCoeff::compute(_x, _y); };
+	using Corr<_Tp>::Corr;
+	virtual _Tp value() { return PearsonCoeff::compute(this->_x, this->_y); };
 	
 	static _Tp compute(const Eigen::Array<_Tp, -1, 1> &x, const Eigen::Array<_Tp, -1, 1> &y) {
 		int n = x.size();
@@ -65,8 +65,8 @@ public:
 template<class _Tp>
 class ComputeCovariance : public Corr<_Tp>{
   public:
-    using Corr::Corr;
-	virtual _Tp value() { return ComputeCovariance::compute(_x, _y); };
+    using Corr<_Tp>::Corr;
+	virtual _Tp value() { return ComputeCovariance::compute(this->_x, this->_y); };
   	
 	static _Tp compute(const Eigen::Array<_Tp, -1, 1> &x, const Eigen::Array<_Tp, -1, 1> &y) {
 			_Tp  avx = 0., avy = 0., num = 0., n = x.size();
@@ -86,8 +86,8 @@ class ComputeCovariance : public Corr<_Tp>{
 template<class _Tp>
 class ComputeGamma : public Corr<_Tp>{
  public:
-    using Corr::Corr;
-	virtual _Tp value() { return ComputeGamma::compute(_x, _y); };
+    using Corr<_Tp>::Corr;
+	virtual _Tp value() { return ComputeGamma::compute(this->_x, this->_y); };
 
 	static _Tp compute(const Eigen::Array<_Tp, -1, 1> &x, const Eigen::Array<_Tp, -1, 1> &y) {
 		_Tp  avx = 0., avy = 0.,
@@ -136,8 +136,8 @@ struct SAscendingSort1 {
 template<class _Tp>
 class ComputeSpearman : public Corr<_Tp>{
   public:
-    using Corr::Corr;
-	virtual _Tp value() { return ComputeSpearman::compute(_x, _y); };
+    using Corr<_Tp>::Corr;
+	virtual _Tp value() { return ComputeSpearman::compute(this->_x, this->_y); };
 
     static _Tp compute(const Eigen::Array<_Tp, -1, 1> &x, const Eigen::Array<_Tp, -1, 1> &y) {
 			unsigned int n = x.rows();

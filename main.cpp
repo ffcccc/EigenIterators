@@ -13,6 +13,34 @@
 using Eigen::Map;
 using namespace std;
 
+#include "norm\normdens.h"
+int testNorm() {
+	double th(-1.334315);
+	double ph(0.9089497);
+
+	// DENSITY N(0,1)
+	double t = th / ph;
+	double n1 = RPORT::normdens(t, 0.0, 1.0);
+	double n2 = RPORT::normdens_fast(t, 0.0, 1.0);
+	double n3 = PLNK::normdens(t, 0.0, 1.0);
+	double n4(0);
+
+	n1 = RPORT::normdens(0, 0.0, 1.0);
+	n2 = RPORT::normdens(0.5, 0.0, 1.0);
+	n3 = RPORT::normdens(1.0, 0.0, 1.0);
+
+	// DIST.
+	// pnorm(-1.33) 										--> 0.09175914
+	n1 = PLNK::pNorm01(-1.33, true);
+	// pnorm(-1.33, lower.tail = FALSE) --> 0.9082409
+	n2 = PLNK::pNorm01(-1.33, false);
+	// pt(-1.33, 999)										--> 0.09191092
+	n3 = PLNK::pT(-1.33, 999);
+	// pt(1.33, 999)										--> 0.9080891
+	n4 = PLNK::pT(1.33, 999);
+	return 0;
+}
+
 #include "lr/lr.h"
 bool testLR(const MyMatrix &iris){
 	Eigen::IOFormat CleanFmt(4, 0, ", ", "\n", "[", "]");
