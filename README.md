@@ -52,20 +52,64 @@ This section started facing the problem of optimize computation of median in a v
 and the max_element algorithm (O(n)). Note that nth_element has another guaranteed side effect, namely that all of the elements
 before n are all guaranteed to be less than v[n], just not necessarily sorted.
 
+### Usage
+```c++
+...
+ 
+```
 
 ## lm -> linear regression solver
+### Usage
+```c++
+...
+ 
+```
 
 ## lr -> logistic regression solver
+### Usage
+```c++
+...
+ 
+```
 
 ## dist -> distance metrics
+### Usage
+```c++
+...
+ 
+```
 
 ## corr -> correlation metrics
+### Usage
+```c++
+...
+ 
+```
 
 ## norm
+### Usage
+```c++
+...
+ 
+```
 
+## numDeriv -> first and second order numerical derivatives
+### Usage
+```c++
+...
+ 
+```
+
+## assoc -> statistical association tests
+### Usage
+```c++
+...
+ 
+```
 
 
 ## Quick Start
+I've created a main.cpp file in the root directory, containing a walkthrough and test application. It's a good starting point to check for use-cases and It's going to get more detailed and curated in the coverage of tests.
 
 ### Step 1) Clone EigenUtils to your working path
 
@@ -82,9 +126,6 @@ before n are all guaranteed to be less than v[n], just not necessarily sorted.
 1. Of course you will need a local copy of the Eigen repository
 2. A restricted number of algoritms (e.g. the T-test code) still depend on the Boost library for some math
 
-## Usage
-
-I've created a main.cpp file in the root directory, containing a walkthrough and test application. It's a good starting point to check for use-cases and It's going to get more detailed and curated in the coverage of tests.
 
 ## Credits
 
