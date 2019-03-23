@@ -1,12 +1,12 @@
 # Eigen::Utils
 
-**EigenUtis** represents the effort of organizing a growing set of snippets into a coherent collection of algorithms that support the amzing Eigen Matrix lib ([Eigen Repository](http://eigen.tuxfamily.org/index.php))
+**EigenUtis** represents the effort of organizing a growing set of snippets into a coherent collection of algorithms that support the amazing ([Eigen Matrix](http://eigen.tuxfamily.org/index.php)) library.
 
-**EigenUtils** makes it easier to create your algorithms, by eliminating a lot of the setup burden:
+**EigenUtils** makes it easier to create your computational algorithms, by eliminating a lot of the setup burden and integrating Eigen code with the rest of the code:
 
-- You don't need to touch the command line
 - You don't need to install/configure
 - You don't need to install runtime dependencies
+- You don't need no more to copy your tensors from the Eigen representatio to another (e.g. STL) to apply standard library's operators
 - It's easy to try out, you can just delete your forked repository if you don't like it
 
 In a few minutes you'll be set up with a minimal, responsive header-only set of libs giving you more time to spend on writing code.
@@ -18,54 +18,52 @@ In a few minutes you'll be set up with a minimal, responsive header-only set of 
 
 Among the subjects covered by the lib you can find:
 
-
-# Eigen Iterators
+## iter -> STL Iterators for Eigen containers 
 Defines an iterator pointing to the first/last element in a Eigen::Array object
 
-Since the Eigen::Array objects have no member functions begin/end defined nor have iterator member types, this snippet of code implements a random-access iterator of an unspecified type whose value_type is T and its reference type is T& for the mutable version and const T& for the constant iterator declaration.
+Since the Eigen::Array objects have no member functions begin/end defined nor have iterator member types, this snippet  implements a random-access iterator of an unspecified type whose value_type is T and its reference type is T& for the mutable version and const T& for the constant iterator declaration.
 
 This is an adaptation of begin/end helper functions defined for std::valarray, which in turn is an overload of std::begin/end, defined in <iterator>.
 
-## Parameters:
+### Parameters:
 x -> A Eigen::Array object.
 
-## Demo
+### Usage
 ```c++
-#include <algorithm>
-#include "Eigen/Core"
-
+...
 #define NA 1000000.0
 
-using namespace std;
-using namespace Eigen;
-
-int main() {
   ArrayXd side(side_par);
   side << 2.0, 2.0, NA, NA, 2.0;
   
   replace_if(begin(side), end(side), [](double i) { return (i == NA); }, 1.0);
-  
   if( any_of(begin(side), end(side), [](double i) { return (fabs(i) != 1.0); }) ) {
     return 1;
   }
   return 0;
- }
- ```
+...
+ 
+```
 
-# Eigen median, mean, variance
-post-condition: After returning, the elements in v may be reordered and the resulting order is implementation defined.
-
-https://stackoverflow.com/questions/1719070/what-is-the-right-approach-when-using-stl-container-for-median-calculation/1719155#1719155         
-This algorithm handles both even and odd sized inputs efficiently using the STL nth_element (amortized O(N)) algorithm
+## stats -> median, mean, variance, contingency tables...
+This section started facing the problem of optimize computation of median in a vectorized environment. An interesting hint came from the [stackoverflow community](https://stackoverflow.com/questions/1719070/what-is-the-right-approach-when-using-stl-container-for-median-calculation/1719155#1719155):  
+         
+>This algorithm handles both even and odd sized inputs efficiently using the STL nth_element (amortized O(N)) algorithm
 and the max_element algorithm (O(n)). Note that nth_element has another guaranteed side effect, namely that all of the elements
 before n are all guaranteed to be less than v[n], just not necessarily sorted.
 
 
-# Eigen fast linear regression solver
+## lm -> linear regression solver
 
-# Eigen distance
+## lr -> logistic regression solver
 
-# Eigen contingency tables
+## dist -> distance metrics
+
+## corr -> correlation metrics
+
+## norm
+
+
 
 ## Quick Start
 
@@ -91,11 +89,6 @@ I've created a main.cpp file in the root directory, containing a walkthrough and
 ## Credits
 
 - [Jekyll](https://github.com/jekyll/jekyll) - Thanks to its creators, contributors and maintainers.
-- [SVG icons](https://github.com/neilorangepeel/Free-Social-Icons) - Thanks, Neil Orange Peel. They're beautiful.
-- [Solarized Light Pygments](https://gist.github.com/edwardhotchkiss/2005058) - Thanks, Edward.
-- [Joel Glovier](http://joelglovier.com/writing/) - Great Jekyll articles. I used Joel's feed.xml in this repository.
-- [David Furnes](https://github.com/dfurnes), [Jon Uy](https://github.com/jonuy), [Luke Patton](https://github.com/lkpttn) - Thanks for the design/code reviews.
-- [Bart Kiers](https://github.com/bkiers), [Florian Simon](https://github.com/vermluh), [Henry Stanley](https://github.com/henryaj), [Hun Jae Lee](https://github.com/hunjaelee), [Javier Cejudo](https://github.com/javiercejudo), [Peter Etelej](https://github.com/etelej), [Ben Abbott](https://github.com/jaminscript), [Ray Nicholus](https://github.com/rnicholus), [Erin Grand](https://github.com/eringrand), [Léo Colombaro](https://github.com/LeoColomb), [Dean Attali](https://github.com/daattali), [Clayton Errington](https://github.com/cjerrington), [Colton Fitzgerald](https://github.com/coltonfitzgerald), [Trace Mayer](https://github.com/sunnankar) - Thanks for your [fantastic contributions](https://github.com/barryclark/jekyll-now/commits/master) to the project!
 
 ## Contributing
 
