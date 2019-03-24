@@ -45,7 +45,7 @@ x -> A Eigen::Array object.
  
 ```
 
-## stats -> median, mean, variance, contingency tables...
+## stats -> median, mean, variance
 This section started facing the problem of optimize computation of median in a vectorized environment. An interesting hint came from the [stackoverflow community](https://stackoverflow.com/questions/1719070/what-is-the-right-approach-when-using-stl-container-for-median-calculation/1719155#1719155):  
          
 >This algorithm handles both even and odd sized inputs efficiently using the STL nth_element (amortized O(N)) algorithm
@@ -58,28 +58,32 @@ before n are all guaranteed to be less than v[n], just not necessarily sorted.
  
 ```
 
-## lm -> linear regression solver
+## lm
+Fast linear regression solver. Thanks to Rcpp/REigen (link)[].
 ### Usage
 ```c++
 ...
  
 ```
 
-## lr -> logistic regression solver
+## lr
+Logistic regression solver, by means of gradient descent of the error function. IRLS to come...
 ### Usage
 ```c++
 ...
  
 ```
 
-## dist -> distance metrics
+## dist
+Distance measures
 ### Usage
 ```c++
 ...
  
 ```
 
-## corr -> correlation metrics
+## corr
+Correlation measures.
 ### Usage
 ```c++
 ...
@@ -87,20 +91,23 @@ before n are all guaranteed to be less than v[n], just not necessarily sorted.
 ```
 
 ## norm
+Normal distribution calculations. Mutauated from Plink and R
 ### Usage
 ```c++
 ...
  
 ```
 
-## numDeriv -> first and second order numerical derivatives
+## numDeriv
+First and second order numerical derivatives
 ### Usage
 ```c++
 ...
  
 ```
 
-## assoc -> statistical association tests
+## assoc
+Statistical association tests, contingency tables, binary similarity measures
 ### Usage
 ```c++
 ...
