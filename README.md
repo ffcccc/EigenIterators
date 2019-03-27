@@ -18,7 +18,8 @@ In a few minutes you'll be set up with a minimal, responsive header-only set of 
 
 Among the subjects covered by the lib you can find:
 
-## iter -> STL Iterators for Eigen containers 
+## iter
+STL Iterators for Eigen containers 
 Defines an iterator pointing to the first/last element in a Eigen::Array object
 
 Since the Eigen::Array objects have no member functions begin/end defined nor have iterator member types, this snippet  implements a random-access iterator of an unspecified type whose value_type is T and its reference type is T& for the mutable version and const T& for the constant iterator declaration.
@@ -45,13 +46,13 @@ x -> A Eigen::Array object.
  
 ```
 
-## stats -> median, mean, variance
+## stats
 This section started facing the problem of optimize computation of median in a vectorized environment. An interesting hint came from the [stackoverflow community](https://stackoverflow.com/questions/1719070/what-is-the-right-approach-when-using-stl-container-for-median-calculation/1719155#1719155):  
          
 >This algorithm handles both even and odd sized inputs efficiently using the STL nth_element (amortized O(N)) algorithm
 and the max_element algorithm (O(n)). Note that nth_element has another guaranteed side effect, namely that all of the elements
-before n are all guaranteed to be less than v[n], just not necessarily sorted.
 
+Now deals with mean, variance and gouped variance too.
 ### Usage
 ```c++
 ...
@@ -59,7 +60,9 @@ before n are all guaranteed to be less than v[n], just not necessarily sorted.
 ```
 
 ## lm
-Fast linear regression solver. Thanks to Rcpp/REigen (link)[].
+Fast linear regression solver. Thanks to Rcpp/REigen (RcppEigen)[https://cran.r-project.org/web/packages/RcppEigen/].
+>fastLm estimates the linear model using one of several methods implemented using the Eigen linear
+algebra library
 ### Usage
 ```c++
 ...
