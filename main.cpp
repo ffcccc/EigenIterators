@@ -35,9 +35,9 @@ int testNorm() {
 	// pnorm(-1.33, lower.tail = FALSE) --> 0.9082409
 	n2 = PLNK::pNorm01(-1.33, false);
 	// pt(-1.33, 999)										--> 0.09191092
-	n3 = PLNK::pT(-1.33, 999);
+	//n3 = PLNK::pT(-1.33, 999);
 	// pt(1.33, 999)										--> 0.9080891
-	n4 = PLNK::pT(1.33, 999);
+	//n4 = PLNK::pT(1.33, 999);
 	return 0;
 }
 

@@ -22,7 +22,7 @@
 #include <functional>
 #include <vector>
 #include "Eigen/Core"
-#include "iter\eigenBeginEnd.h"
+#include "iter/eigenBeginEnd.h"
 
 //using namespace Eigen;
 

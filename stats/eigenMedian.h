@@ -24,6 +24,7 @@
 #include <vector>
 #include "iter/eigenBeginEnd.h"
 
+// MSVC tip: use /Zc:__cplusplus compiler language option
 #if __cplusplus >= 201103L
 
 

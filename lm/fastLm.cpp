@@ -43,6 +43,8 @@ namespace lmsol
 
 	double NA_REAL;
 	int NA_INTEGER;
+	#define NA_REAL 0.0;
+	#define NA_INTEGER 0;
 
 	using std::invalid_argument;
 	using std::numeric_limits;

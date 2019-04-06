@@ -16,10 +16,13 @@
 // You can check a copy of the GNU General Public License at
 // <http://www.gnu.org/licenses/>.
 
+#include "Eigen/Dense"
+
 #ifndef ___EigenIteratorHelper___
 #define ___EigenIteratorHelper___
 
-//#if __cplusplus >= 201103L
+// MSVC tip: use /Zc:__cplusplus compiler language option
+#if __cplusplus >= 201103L
   /**
    *  @brief  Return an iterator pointing to the first element of
    *          the valarray.
@@ -60,6 +63,6 @@
     end(const Eigen::Array<_Tp, -1, 1>& __va)
     { return std::addressof(__va(0)) + __va.size(); }
 
-//#endif
+#endif
 
 #endif
